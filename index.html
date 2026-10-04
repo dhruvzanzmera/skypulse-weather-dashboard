@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SkyPulse – Real-time weather forecasts. Get current conditions, hourly and 5-day outlooks for any location." />
+  <title>SkyPulse – Weather Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon"><i class="fa-solid fa-cloud-sun"></i></div>
+      <span class="logo-text">SkyPulse</span>
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Main navigation">
+      <button class="nav-item active" id="navDashboard">
+        <i class="fa-solid fa-gauge-high"></i> Dashboard
+      </button>
+      <button class="nav-item" id="navHourly">
+        <i class="fa-solid fa-clock"></i> Hourly
+      </button>
+      <button class="nav-item" id="navForecast">
+        <i class="fa-solid fa-calendar-days"></i> 5-Day Forecast
+      </button>
+      <button class="nav-item" id="navAirQuality">
+        <i class="fa-solid fa-lungs"></i> Air Quality
+      </button>
+      <button class="nav-item" id="navWind">
+        <i class="fa-solid fa-wind"></i> Wind
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="sidebar-location-btn" id="locationBtn" aria-label="Use my location">
+        <i class="fa-solid fa-location-crosshairs"></i>
+        <span>My Location</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <div class="app-content">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <h2 id="topbarCity">Weather Dashboard</h2>
+        <p id="topbarDate">–</p>
+      </div>
+
+      <div class="search-container">
+        <div class="search-box" id="searchBox">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search city..." autocomplete="off" aria-label="Search city" />
+          <button id="searchBtn" aria-label="Search">
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+        <ul class="suggestions-list" id="suggestionsList" role="listbox"></ul>
+      </div>
+
+      <button class="location-btn" id="locationBtnTop" aria-label="Use my location">
+        <i class="fa-solid fa-location-crosshairs"></i>
+        <span>My Location</span>
+      </button>
+    </header>
+
+    <!-- PAGE MAIN -->
+    <main class="page-main">
+
+      <!-- Loading -->
+      <div class="loading-screen" id="loadingScreen">
+        <div class="loader-ring"><div></div><div></div><div></div><div></div></div>
+        <p class="loading-text">Fetching your weather data…</p>
+      </div>
+
+      <!-- Error -->
+      <div class="error-screen" id="errorScreen" hidden>
+        <div class="error-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h2 class="error-title">Something went wrong</h2>
+        <p class="error-msg" id="errorMsg">Unable to retrieve weather data.</p>
+        <button class="retry-btn" id="retryBtn"><i class="fa-solid fa-rotate-right"></i> Try Again</button>
+      </div>
+
+      <!-- WEATHER DASHBOARD -->
+      <div class="weather-content" id="weatherContent" hidden>
+        <div class="dashboard-grid">
+
+          <!-- ── HERO CARD ── -->
+          <section class="hero-card" aria-label="Current weather">
+            <div class="hero-top">
+              <div class="hero-location">
+                <h1 class="city-name" id="cityName">–</h1>
+                <p class="country-name" id="countryName">–</p>
+                <p class="date-time" id="dateTime">–</p>
+              </div>
+              <div class="hero-icon-wrap">
+                <img class="weather-icon-large" id="weatherIconLarge" src="" alt="Weather icon" />
+              </div>
+            </div>
+
+            <div class="hero-temp-row">
+              <span class="main-temp" id="mainTemp">–°</span>
+              <div class="hero-temp-meta">
+                <p class="weather-desc" id="weatherDesc">–</p>
+                <div class="feels-like-row">
+                  <span id="feelsLike">Feels like –°</span>
+                  <span id="tempRange">–</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat-pill">
+                <i class="fa-solid fa-droplet"></i>
+                <span class="stat-pill-val" id="humidityVal">–</span>
+                <span class="stat-pill-label">Humidity</span>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-wind"></i>
+                <span class="stat-pill-val" id="windVal">–</span>
+                <span class="stat-pill-label">Wind</span>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-eye"></i>
+                <span class="stat-pill-val" id="visibilityVal">–</span>
+                <span class="stat-pill-label">Visibility</span>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-gauge-high"></i>
+                <span class="stat-pill-val" id="pressureVal">–</span>
+                <span class="stat-pill-label">Pressure</span>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-cloud"></i>
+                <span class="stat-pill-val" id="cloudinessVal">–</span>
+                <span class="stat-pill-label">Cloud Cover</span>
+              </div>
+              <div class="stat-pill">
+                <i class="fa-solid fa-umbrella"></i>
+                <span class="stat-pill-val" id="uvVal">–</span>
+                <span class="stat-pill-label">Precip</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── RIGHT COLUMN ── -->
+          <div class="right-col">
+
+            <!-- Sunrise / Sunset -->
+            <div class="panel-card">
+              <p class="panel-title"><i class="fa-solid fa-sun"></i> Sunrise &amp; Sunset</p>
+              <div class="sun-row">
+                <div class="sun-item">
+                  <div class="sun-item-icon">🌅</div>
+                  <p class="sun-item-label">Sunrise</p>
+                  <p class="sun-item-time" id="sunriseTime">–</p>
+                </div>
+                <div class="sun-arc-wrapper">
+                  <svg class="sun-arc" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#f97316"/>
+                        <stop offset="100%" stop-color="#facc15"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M10 90 Q100 10 190 90" stroke="url(#arcGrad)" stroke-width="3" stroke-dasharray="6 4" fill="none"/>
+                    <circle class="sun-dot" id="sunDot" cx="100" cy="10" r="7" fill="#facc15"/>
+                  </svg>
+                </div>
+                <div class="sun-item">
+                  <div class="sun-item-icon">🌇</div>
+                  <p class="sun-item-label">Sunset</p>
+                  <p class="sun-item-time" id="sunsetTime">–</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Air Quality -->
+            <div class="panel-card" id="aqiCard">
+              <p class="panel-title"><i class="fa-solid fa-lungs"></i> Air Quality Index</p>
+              <div class="aqi-main-row">
+                <span class="aqi-value" id="aqiValue">–</span>
+                <span class="aqi-badge" id="aqiLabel">–</span>
+              </div>
+              <div class="aqi-bar">
+                <div class="aqi-indicator" id="aqiIndicator"></div>
+              </div>
+              <div class="aqi-scale-labels">
+                <span>Good</span><span>Fair</span><span>Mod.</span><span>Poor</span><span>V.Poor</span>
+              </div>
+              <div class="aqi-pollutants" id="aqiPollutants"></div>
+            </div>
+
+            <!-- Wind -->
+            <div class="panel-card">
+              <p class="panel-title"><i class="fa-solid fa-compass"></i> Wind Details</p>
+              <div class="wind-compass-wrap">
+                <div class="compass" id="compassEl">
+                  <div class="compass-ring"></div>
+                  <div class="compass-labels">
+                    <span class="cl-n">N</span>
+                    <span class="cl-e">E</span>
+                    <span class="cl-s">S</span>
+                    <span class="cl-w">W</span>
+                  </div>
+                  <div class="compass-needle" id="compassNeedle"></div>
+                </div>
+                <div class="wind-stats">
+                  <div class="wind-stat"><span class="ws-label">Speed</span><span class="ws-val" id="wdSpeed">–</span></div>
+                  <div class="wind-stat"><span class="ws-label">Gust</span><span class="ws-val" id="wdGust">–</span></div>
+                  <div class="wind-stat"><span class="ws-label">Direction</span><span class="ws-val" id="wdDir">–</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /right-col -->
+
+          <!-- ── HOURLY ── -->
+          <section class="hourly-section" aria-label="Hourly forecast">
+            <div class="section-label">
+              <i class="fa-solid fa-clock"></i>
+              <h2>Hourly Forecast</h2>
+            </div>
+            <div class="hourly-scroll" id="hourlyScroll"></div>
+          </section>
+
+          <!-- ── 5-DAY ── -->
+          <section class="daily-section" aria-label="5-day forecast">
+            <div class="section-label">
+              <i class="fa-solid fa-calendar-days"></i>
+              <h2>5-Day Forecast</h2>
+            </div>
+            <div class="daily-grid" id="dailyGrid"></div>
+          </section>
+
+        </div><!-- /dashboard-grid -->
+      </div><!-- /weather-content -->
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <p>Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> &amp; <a href="https://nominatim.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> — No API key required</p>
+      <p>Last updated: <span id="lastUpdated">–</span></p>
+    </footer>
+
+  </div><!-- /app-content -->
+</div><!-- /app-layout -->
+
+<script src="app.js"></script>
+</body>
+</html>
