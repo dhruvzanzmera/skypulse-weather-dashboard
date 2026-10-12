@@ -47,6 +47,7 @@ function bindEvents() {
     if (!e.target.closest('.search-container')) clearSuggestions();
   });
   // Sidebar nav scroll-to
+  $('navDashboard').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   $('navHourly').addEventListener('click', () => document.querySelector('.hourly-section')?.scrollIntoView({ behavior: 'smooth' }));
   $('navForecast').addEventListener('click', () => document.querySelector('.daily-section')?.scrollIntoView({ behavior: 'smooth' }));
   $('navAirQuality').addEventListener('click', () => $('aqiCard')?.scrollIntoView({ behavior: 'smooth' }));
